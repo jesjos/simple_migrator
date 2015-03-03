@@ -6,5 +6,9 @@ require "simple_migrator/migrator"
 require "simple_migrator/migratable"
 
 module SimpleMigrator
-  # Your code goes here...
+  class << self
+    def migrator(*args, &block)
+      Migrator.new(*args, &block)
+    end
+  end
 end
