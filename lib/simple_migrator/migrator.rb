@@ -5,7 +5,7 @@ module SimpleMigrator
       ensure_migration_table!
     end
 
-    def migrate(name, block)
+    def migrate(name, &block)
       connection.transaction do
         unless migrated?(name)
           execute(block)

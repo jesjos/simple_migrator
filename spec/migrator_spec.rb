@@ -19,7 +19,7 @@ module SimpleMigrator
     describe "#migrated?" do
       context "when a migration of that name has been migrated" do
         it "returns true" do
-          migrator.migrate("foo", -> (_db) {})
+          migrator.migrate("foo", & -> (_db) {})
           expect(migrator.migrated?("foo")).to be_truthy
         end
       end
@@ -34,14 +34,12 @@ module SimpleMigrator
     describe "#migrate" do
       context "when the migration has not been run previously" do
         it "runs the migration" do
-          migration = double
-          expect(migration).to receive(:call)
-          migrator.migrate("foo", migration)
+          expect { |b| migrator.migrate("foo", &b) }.to yield_control
         end
 
         it "writes the migration name to the migrations table" do
           migration = -> (_) {}
-          migrator.migrate("foo", migration)
+          migrator.migrate("foo", &migration)
           migrations = migrator.migrations_table.select_map(:migration_name)
           expect(migrations).to include("foo")
         end
@@ -49,10 +47,8 @@ module SimpleMigrator
 
       context "when the migration has already run" do
         it "does not re run it" do
-          migrator.migrate("foo", ->(_) {})
-          migration = double
-          expect(migration).to_not receive(:call)
-          migrator.migrate("foo", migration)
+          migrator.migrate("foo", & ->(_) {})
+          expect { |b| migrator.migrate("foo", &b) }.to_not yield_control
         end
       end
     end

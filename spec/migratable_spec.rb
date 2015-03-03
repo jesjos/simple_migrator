@@ -5,7 +5,7 @@ module SimpleMigrator
 
     attr_accessor :driver
 
-    def migrate(_, proc)
+    def migrate(_, &proc)
       proc.call(driver)
     end
 
