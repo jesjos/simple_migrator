@@ -22,7 +22,7 @@ module SimpleMigrator
       raise NoMigratorError, "`migrate!` called without a migrator.\nEither provide a migrator or define a `migrator` method"
     end
 
-    def rebind_proc(proc)5
+    def rebind_proc(proc)
       Proc.new do |db|
         instance_exec(db, &proc)
       end
