@@ -1,10 +1,10 @@
 module SimpleMigrator
   module Migratable
-    def migrate!(migrator = migrator)
+    def migrate!(_migrator = migrator)
       self.class.migrations.each do |migration|
         rebound_proc = rebind_proc(migration.proc)
         name = prefixed_migration_name(migration.name)
-        migrator.migrate(name, &rebound_proc)
+        _migrator.migrate(name, &rebound_proc)
       end
     end
 
