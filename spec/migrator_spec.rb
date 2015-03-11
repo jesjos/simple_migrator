@@ -7,11 +7,26 @@ module SimpleMigrator
 
     describe "#initialize" do
       context "when no prior migration table exists" do
-        before do
-          Migrator.new(connection)
+        context "when given no explicit table name" do
+          before do
+            Migrator.new(connection)
+          end
+
+          it "creates one" do
+            expect(connection.tables).to include(Migrator.default_table_name)
+          end
         end
-        it "creates one" do
-          expect(connection.tables).to include(Migrator.table_name)
+
+        context "when given an explicit table name" do
+          context "when given a table name" do
+            let(:table_name) { :foobar }
+            before do
+              Migrator.new(connection, table_name)
+            end
+            it "creates a table with that name" do
+              expect(connection.tables).to include(table_name)
+            end
+          end
         end
       end
     end

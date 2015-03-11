@@ -1,6 +1,7 @@
 module SimpleMigrator
   class Migrator
-    def initialize(connection)
+    def initialize(connection, migration_table_name = nil)
+      @table_name = migration_table_name
       @connection = connection
       ensure_migration_table!
     end
@@ -22,12 +23,12 @@ module SimpleMigrator
       connection[table_name]
     end
 
-    def self.table_name
-      :schema_migrations
+    def self.default_table_name
+      :simple_migrator_schema_migrations
     end
 
     def table_name
-      self.class.table_name
+      @table_name || self.class.default_table_name
     end
 
     private
