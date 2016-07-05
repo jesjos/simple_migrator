@@ -18,45 +18,48 @@ It has some important caveats:
 
 ### Just migrate stuff
 
-    db = Sequel.sqlite
-    migrator = SimpleMigrator.migrator(db)
-    migrator.migrate("my_migration") do |connection|
-      # do stuff
-    end
-    # Your stuff has been done
-    migrator.migrate("my_migration") do
-      # This time the migrator won't execute the block
-    end
+```ruby
+db = Sequel.sqlite
+migrator = SimpleMigrator.migrator(db)
+migrator.migrate("my_migration") do |connection|
+  # do stuff
+end
+# Your stuff has been done
+migrator.migrate("my_migration") do
+  # This time the migrator won't execute the block
+end
+```
 
 ### Using Migratable
 
-    class Foo
-      include SimpleMigrator::Migratable
+```ruby
+class Foo
+  include SimpleMigrator::Migratable
 
-      migration "20150303-1" do |db|
-        create_my_table(db)
-        create_my_other_table(db)
-      end
+  migration "20150303-1" do |db|
+    create_my_table(db)
+    create_my_other_table(db)
+  end
 
-      migration "20150303-2" do |db|
-        add_column(db)
-      end
+  migration "20150303-2" do |db|
+    add_column(db)
+  end
 
-      def create_my_table(db)
-      end
+  def create_my_table(db)
+  end
 
-      def create_my_other_table(db)
-      end
+  def create_my_other_table(db)
+  end
 
-      def add_column(db)
-      end
-    end
+  def add_column(db)
+  end
+end
 
-    db = Sequel.sqlite
-    
-    migrator = SimpleMigrator.migrator(db)
+db = Sequel.sqlite
 
-    foo = Foo.new
+migrator = SimpleMigrator.migrator(db)
 
-    foo.migrate(migrator)
+foo = Foo.new
 
+foo.migrate(migrator)
+```
